@@ -23,7 +23,7 @@ const AddAuthor=()=>{
 
     useEffect(()=>{
         return ()=>isMounted=false;
-    },[])
+    },[isMounted])
     return (
         <Form onSubmit={handleSubmit}>
             <Input

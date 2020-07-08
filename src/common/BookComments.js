@@ -61,7 +61,7 @@ export const BookComments =({firebase,bookId})=>{
            }
         }
 
-    },[])
+    },[bookId,firebase])
 
    function handlePostCommentSubmit(e){
         e.preventDefault();
