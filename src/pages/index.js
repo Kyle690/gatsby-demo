@@ -1,22 +1,74 @@
 import React from "react"
-import { Link } from "gatsby"
+import { Link, graphql } from "gatsby";
+import styled from "styled-components";
 
-import Layout from "../components/layout"
-import Image from "../components/image"
-import SEO from "../components/seo"
+import BookItem from "../components/BookItem";
 
-const IndexPage = () => (
-  <Layout>
-    <SEO title="Home" />
-    <h1>Hi people</h1>
-    <p>Welcome to your new Gatsby site.</p>
-    <p>Now go build something great.</p>
-    <div style={{ maxWidth: `300px`, marginBottom: `1.45rem` }}>
-      <Image />
-    </div>
-    <Link to="/page-2/">Go to page 2</Link> <br />
-    <Link to="/using-typescript/">Go to "Using TypeScript"</Link>
-  </Layout>
-)
+const LinkButton=styled.div`
+    text-align:right;
+    
+    a{
+        padding:8px;
+        background:rebeccapurple;
+        color:white;
+        border-radius:8px;
+        text-decoration:none;
+        
+        &:hover{
+            background:indigo;
+        }
+    }
+    
+    
+`
+
+
+const IndexPage = ({data}) => {
+
+    return (
+        <section>
+            {data.allBook.edges.map(book=>(
+                <BookItem
+                    key={book.node.id}
+                    title={book.node.title}
+                    summary={book.node.summary}
+                    author={book.node.author.name}
+                    image={book.node.localImage.childImageSharp.fixed}
+                >
+                <LinkButton>
+                    <Link to={`/book/${book.node.id}`}>
+                        Join Conversation
+                    </Link>
+                </LinkButton>
+                </BookItem>
+                )
+            )}
+        </section>
+    )
+}
+
+export const query= graphql`
+{
+  allBook {
+    edges {
+      node {
+        title
+        id
+        author {
+          name
+        }
+        summary
+        localImage {
+         childImageSharp{
+            fixed(width:200){
+              ...GatsbyImageSharpFixed
+            }
+          }
+        }
+      }
+    }
+  }
+}
+`
 
 export default IndexPage
